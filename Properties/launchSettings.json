@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PlayerCountBot": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
