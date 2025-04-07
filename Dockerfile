@@ -1,14 +1,15 @@
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
-WORKDIR /src
+WORKDIR /app
 
-# Copy everything
+# Copy everything into /app
 COPY . .
 
-# Restore and publish
-WORKDIR /src/DiscordPlayerCountBot
+# Restore dependencies
 RUN dotnet restore
+
+# Publish the project
 RUN dotnet publish DiscordPlayerCountBot.csproj -c Release -o /app/publish
 
 # Runtime stage
@@ -19,3 +20,4 @@ COPY --from=build /app/publish .
 
 ENV ISDOCKER=True
 ENTRYPOINT ["dotnet", "DiscordPlayerCountBot.dll"]
+
