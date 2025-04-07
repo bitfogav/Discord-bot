@@ -1,21 +1,19 @@
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-
 WORKDIR /app
 
-COPY . /app
-RUN dotnet restore
+# Copy everything into /app
+COPY . .
 
-WORKDIR /app
+# Publish the project from the correct path
+RUN dotnet publish DiscordPlayerCountBot/DiscordPlayerCountBot.csproj -c Release -o /app/publish
 
-RUN ls -la /app
-RUN ls -la ./
-RUN dotnet publish /app/DiscordPlayerCountBot.csproj -c Release -o /app/publish
-
+# Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
-
 WORKDIR /app
 
 COPY --from=build /app/publish .
 
-ENV ISDOCKER=True
+# Set entrypoint to run the app
 ENTRYPOINT ["dotnet", "DiscordPlayerCountBot.dll"]
+
